@@ -73,7 +73,7 @@ public class TTSTokenExchangeProvider implements TokenExchangeProvider {
         LOG.debug("TTS::exchange");
 
         // REQUIRED
-        this.audience = params.getAudience();
+        this.audience = params.getAudience().getFirst();
         this.scope = params.getScope();
         String subjectToken = params.getSubjectToken();
         String subjectTokenType = params.getSubjectTokenType();
@@ -149,6 +149,11 @@ public class TTSTokenExchangeProvider implements TokenExchangeProvider {
 //            case "scope1" -> "purp1";
 //            default -> "default";
 //        };
+    }
+
+    @Override
+    public int getVersion() {
+        return 0;
     }
 
     @Override
