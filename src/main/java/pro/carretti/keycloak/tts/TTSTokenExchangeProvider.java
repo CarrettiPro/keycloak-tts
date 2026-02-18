@@ -10,6 +10,7 @@ import org.jboss.logging.Logger;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.Token;
 import org.keycloak.TokenCategory;
+import org.keycloak.authentication.authenticators.client.FederatedJWTClientAuthenticator;
 import org.keycloak.broker.oidc.OIDCIdentityProvider;
 import org.keycloak.broker.oidc.OIDCIdentityProviderConfig;
 import org.keycloak.common.util.Time;
@@ -28,6 +29,7 @@ import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.JsonWebToken;
 import org.keycloak.services.Urls;
 import org.keycloak.utils.OAuth2Error;
+import org.keycloak.utils.StringUtil;
 
 public class TTSTokenExchangeProvider implements TokenExchangeProvider {
 
@@ -36,10 +38,15 @@ public class TTSTokenExchangeProvider implements TokenExchangeProvider {
     private static final String TXN_TOKEN_REQUESTED_TOKEN_TYPE = "urn:ietf:params:oauth:token-type:txn_token";
     private static final String TXN_TOKEN_TYPE = "txntoken+jwt";
     private static final String N_A = "N_A";
-    private static final String TXN = "txn";
     private static final String PURP = "purp";
     private static final String REQUEST_CONTEXT = "request_context";
     private static final String REQUEST_DETAILS = "request_details";
+
+    // Transaction Token claims
+    private static final String RCTX = "rctx";
+    private static final String REQ_WL = "req_wl";
+    private static final String TCTX = "tctx";
+    private static final String TXN = "txn";
 
     // TODO: configure
     private static final String ALLOWED_AUDIENCE = "http://trust-domain.example";
@@ -116,7 +123,11 @@ public class TTSTokenExchangeProvider implements TokenExchangeProvider {
         token.audience(this.audience);
         token.setOtherClaims(TXN, KeycloakModelUtils.generateId());
         token.setSubject(client.getClientId());
-        // TODO: getPurp()
+
+        String wlid = client.getAttribute(FederatedJWTClientAuthenticator.JWT_CREDENTIAL_SUBJECT_KEY);
+        token.setOtherClaims(REQ_WL, StringUtil.isNotBlank(wlid) ? wlid : client.getClientId());
+
+            // TODO: getPurp()
         token.setOtherClaims(PURP, getPurp());
 
         // OPTIONAL
