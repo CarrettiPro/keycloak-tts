@@ -1,0 +1,4 @@
+FROM busybox
+
+RUN mkdir -p /tmp/providers
+COPY target/keycloak-tts*.jar /tmp/providers
