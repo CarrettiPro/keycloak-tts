@@ -17,6 +17,7 @@ import org.keycloak.crypto.SignatureProvider;
 import org.keycloak.crypto.SignatureSignerContext;
 import org.keycloak.jose.jws.JWSBuilder;
 import org.keycloak.models.ClientModel;
+import org.keycloak.models.IdentityProviderModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.utils.KeycloakModelUtils;
@@ -31,6 +32,7 @@ import org.keycloak.utils.OAuth2Error;
 public class TTSTokenExchangeProvider implements TokenExchangeProvider {
 
     private static final Logger LOG = Logger.getLogger(TTSTokenExchangeProvider.class);
+    private static final String TTS_IDP_ALIAS = "tts";
     private static final String TXN_TOKEN_REQUESTED_TOKEN_TYPE = "urn:ietf:params:oauth:token-type:txn_token";
     private static final String TXN_TOKEN_TYPE = "txntoken+jwt";
     private static final String N_A = "N_A";
@@ -47,16 +49,14 @@ public class TTSTokenExchangeProvider implements TokenExchangeProvider {
     private final KeycloakSession session;
     private final RealmModel realm;
     private final ClientModel client;
-    private final OIDCIdentityProvider idp;
 
     private String audience;
     private String scope;
 
-    public TTSTokenExchangeProvider(KeycloakSession session, OIDCIdentityProviderConfig config) {
+    public TTSTokenExchangeProvider(KeycloakSession session) {
         this.session = session;
         this.realm = session.getContext().getRealm();
         this.client = session.getContext().getClient();
-        this.idp = new OIDCIdentityProvider(session, config);
         // TODO: event
     }
 
@@ -92,12 +92,19 @@ public class TTSTokenExchangeProvider implements TokenExchangeProvider {
             throw new OAuth2Error().invalidRequest("Audience not allowed: " + audience);
         }
 
-        JsonWebToken jwt = this.idp.validateToken(subjectToken);
-        AccessToken txnToken = createTxnToken(jwt);
-        String txnTokenString = encode(txnToken);
+        OIDCIdentityProvider idp = getIdP();
+        if (idp != null) {
+            LOG.debugv("TTS::exchange IdP = {0}", idp);
+            JsonWebToken jwt = idp.validateToken(subjectToken);
+            AccessToken txnToken = createTxnToken(jwt);
+            String txnTokenString = encode(txnToken);
 
-        LOG.debug("TTS::exchange successful");
-        return createResponse(txnTokenString);
+            LOG.debug("TTS::exchange successful");
+            return createResponse(txnTokenString);
+        } else {
+            LOG.warn("TTS::exchange failed: No TTS IdP configured");
+            throw new OAuth2Error().invalidRequest("No TTS IdP configured");
+        }
     }
 
     private AccessToken createTxnToken(JsonWebToken jwt) {
@@ -158,6 +165,15 @@ public class TTSTokenExchangeProvider implements TokenExchangeProvider {
 
     @Override
     public void close() {
+    }
+
+    private OIDCIdentityProvider getIdP() {
+        IdentityProviderModel model = session.identityProviders().getByAlias(TTS_IDP_ALIAS);
+        if (model != null) {
+            OIDCIdentityProviderConfig config = new OIDCIdentityProviderConfig(model);
+            return new OIDCIdentityProvider(session, config);
+        }
+        return null;
     }
 
     @JsonIgnoreProperties({ "expires_in", "refresh_expires_in", "not-before-policy" })
