@@ -1,9 +1,14 @@
 package pro.carretti.keycloak.tts;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
+import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.Charset;
 
 import org.jboss.logging.Logger;
 
@@ -28,6 +33,7 @@ import org.keycloak.representations.AccessTokenResponse;
 import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.JsonWebToken;
 import org.keycloak.services.Urls;
+import org.keycloak.util.JsonSerialization;
 import org.keycloak.utils.OAuth2Error;
 import org.keycloak.utils.StringUtil;
 
@@ -59,6 +65,8 @@ public class TTSTokenExchangeProvider implements TokenExchangeProvider {
 
     private String audience;
     private String scope;
+    private String requestContext;
+    private String requestDetails;
 
     public TTSTokenExchangeProvider(KeycloakSession session) {
         this.session = session;
@@ -86,8 +94,8 @@ public class TTSTokenExchangeProvider implements TokenExchangeProvider {
         String subjectTokenType = params.getSubjectTokenType();
 
         // OPTIONAL
-        String requestContext = context.getFormParams().getFirst(REQUEST_CONTEXT);
-        String requestDetails = context.getFormParams().getFirst(REQUEST_DETAILS);
+        requestContext = context.getFormParams().getFirst(REQUEST_CONTEXT);
+        requestDetails = context.getFormParams().getFirst(REQUEST_DETAILS);
 
         if (!OAuth2Constants.ACCESS_TOKEN_TYPE.equals(subjectTokenType)) {
             LOG.warnv("Subject token type not recognized: {0}", subjectTokenType);
@@ -133,8 +141,18 @@ public class TTSTokenExchangeProvider implements TokenExchangeProvider {
         // OPTIONAL
         String issuer = Urls.realmIssuer(session.getContext().getUri().getBaseUri(), realm.getName());
         token.issuer(issuer);
-        // TODO: azd
-        // TODO: rctx
+
+        if (StringUtil.isNotBlank(requestContext)) {
+            String decoded = URLDecoder.decode(requestContext, Charset.defaultCharset());
+            try {
+                RequestContext rctx = JsonSerialization.readValue(decoded, RequestContext.class);
+                token.setOtherClaims(RCTX, rctx);
+            } catch (IOException ex) {
+                LOG.errorv(ex, "Error parsing {0}: {1}", REQUEST_CONTEXT, decoded);
+            }
+        }
+
+        // TODO: tctx
 
         return token;
     }
@@ -191,5 +209,7 @@ public class TTSTokenExchangeProvider implements TokenExchangeProvider {
     class TxnTokenResponse extends AccessTokenResponse {
 
     }
+
+    record RequestContext(@JsonProperty("req_ip") String reqIP, String authn) {  }
 
 }
