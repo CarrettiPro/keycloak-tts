@@ -111,6 +111,12 @@ public class TTSTokenExchangeProvider implements TokenExchangeProvider {
         if (idp != null) {
             LOG.debugv("TTS::exchange IdP = {0}", idp);
             JsonWebToken jwt = idp.validateToken(subjectToken);
+            try {
+                LOG.debugv("Validated subject token:\n{0}", JsonSerialization.writeValueAsPrettyString(jwt));
+            } catch (IOException ex) {
+                LOG.warn("Error processing JSON", ex);
+            }
+
             AccessToken txnToken = createTxnToken(jwt);
             String txnTokenString = encode(txnToken);
 
