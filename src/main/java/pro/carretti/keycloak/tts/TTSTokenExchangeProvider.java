@@ -44,7 +44,6 @@ public class TTSTokenExchangeProvider implements TokenExchangeProvider {
     private static final String TXN_TOKEN_REQUESTED_TOKEN_TYPE = "urn:ietf:params:oauth:token-type:txn_token";
     private static final String TXN_TOKEN_TYPE = "txntoken+jwt";
     private static final String N_A = "N_A";
-    private static final String PURP = "purp";
     private static final String REQUEST_CONTEXT = "request_context";
     private static final String REQUEST_DETAILS = "request_details";
 
@@ -142,7 +141,7 @@ public class TTSTokenExchangeProvider implements TokenExchangeProvider {
         token.setOtherClaims(REQ_WL, StringUtil.isNotBlank(wlid) ? wlid : client.getClientId());
 
             // TODO: getPurp()
-        token.setOtherClaims(PURP, getPurp());
+        token.setOtherClaims(OAuth2Constants.SCOPE, getScope());
 
         // OPTIONAL
         String issuer = Urls.realmIssuer(session.getContext().getUri().getBaseUri(), realm.getName());
@@ -184,11 +183,11 @@ public class TTSTokenExchangeProvider implements TokenExchangeProvider {
         return Response.ok(tokenResponse).type(MediaType.APPLICATION_JSON_TYPE).build();
     }
 
-    private String getPurp() {
+    private String getScope() {
         return scope;
         // TODO: validate & map
 //        return switch (scope) {
-//            case "scope1" -> "purp1";
+//            case "scope1" -> "scope2";
 //            default -> "default";
 //        };
     }
