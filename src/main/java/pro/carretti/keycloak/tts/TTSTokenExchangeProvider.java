@@ -13,6 +13,7 @@ import java.nio.charset.Charset;
 import org.jboss.logging.Logger;
 
 import org.keycloak.OAuth2Constants;
+import org.keycloak.OAuthErrorException;
 import org.keycloak.Token;
 import org.keycloak.TokenCategory;
 import org.keycloak.authentication.authenticators.client.FederatedJWTClientAuthenticator;
@@ -53,14 +54,16 @@ public class TTSTokenExchangeProvider implements TokenExchangeProvider {
     private static final String TCTX = "tctx";
     private static final String TXN = "txn";
 
-    // TODO: configure
-    private static final String ALLOWED_AUDIENCE = "http://trust-domain.example";
-    // TODO: configure
+    private static final String TTS_IDP_ALLOWED_AUDIENCE = "tts.audience";
+    private static final String TTS_IDP_TXN_TOKEN_LIFESPAN = "tts.token.lifespan";
     private static final long TXN_TOKEN_LIFESPAN = 5;
 
     private final KeycloakSession session;
     private final RealmModel realm;
     private final ClientModel client;
+
+    private OIDCIdentityProvider idp;
+    private long lifespan = TXN_TOKEN_LIFESPAN;
 
     private String audience;
     private String scope;
@@ -93,38 +96,49 @@ public class TTSTokenExchangeProvider implements TokenExchangeProvider {
         String subjectTokenType = params.getSubjectTokenType();
 
         // OPTIONAL
-        requestContext = context.getFormParams().getFirst(REQUEST_CONTEXT);
-        requestDetails = context.getFormParams().getFirst(REQUEST_DETAILS);
+        this.requestContext = context.getFormParams().getFirst(REQUEST_CONTEXT);
+        this.requestDetails = context.getFormParams().getFirst(REQUEST_DETAILS);
 
         if (!OAuth2Constants.ACCESS_TOKEN_TYPE.equals(subjectTokenType)) {
             LOG.warnv("Subject token type not recognized: {0}", subjectTokenType);
             throw new OAuth2Error().invalidRequest("Subject token type not recognized: " + subjectTokenType);
         }
 
-        if (!ALLOWED_AUDIENCE.equals(audience)) {
+        this.idp = getIdP();
+        if (idp == null) {
+            LOG.warn("TTS::exchange failed: No TTS IdP configured - please consult the README");
+            throw new OAuth2Error().error(OAuthErrorException.SERVER_ERROR).errorDescription("No TTS IdP configured").build();
+        }
+
+        LOG.debugv("TTS::exchange IdP = {0}", idp);
+
+        String sLifespan = idp.getConfig().getConfig().get(TTS_IDP_TXN_TOKEN_LIFESPAN);
+        if (StringUtil.isNotBlank(sLifespan))
+            this.lifespan = Long.parseLong(sLifespan);
+
+        String allowedAudience = idp.getConfig().getConfig().get(TTS_IDP_ALLOWED_AUDIENCE);
+        if (StringUtil.isBlank(allowedAudience)) {
+            LOG.warn("TTS::exchange failed: allowed audience not configured - please consult the README");
+            throw new OAuth2Error().error(OAuthErrorException.SERVER_ERROR).errorDescription("Allowed audience not configured").build();
+        }
+
+        if (!allowedAudience.equals(audience)) {
             LOG.warnv("Audience not allowed: ", audience);
             throw new OAuth2Error().invalidRequest("Audience not allowed: " + audience);
         }
 
-        OIDCIdentityProvider idp = getIdP();
-        if (idp != null) {
-            LOG.debugv("TTS::exchange IdP = {0}", idp);
-            JsonWebToken jwt = idp.validateToken(subjectToken);
-            try {
-                LOG.debugv("Validated subject token:\n{0}", JsonSerialization.writeValueAsPrettyString(jwt));
-            } catch (IOException ex) {
-                LOG.warn("Error processing JSON", ex);
-            }
-
-            AccessToken txnToken = createTxnToken(jwt);
-            String txnTokenString = encode(txnToken);
-
-            LOG.debug("TTS::exchange successful");
-            return createResponse(txnTokenString);
-        } else {
-            LOG.warn("TTS::exchange failed: No TTS IdP configured");
-            throw new OAuth2Error().invalidRequest("No TTS IdP configured");
+        JsonWebToken jwt = idp.validateToken(subjectToken);
+        try {
+            LOG.debugv("Validated subject token:\n{0}", JsonSerialization.writeValueAsPrettyString(jwt));
+        } catch (IOException ex) {
+            LOG.warn("Error processing JSON", ex);
         }
+
+        AccessToken txnToken = createTxnToken(jwt);
+        String txnTokenString = encode(txnToken);
+
+        LOG.debug("TTS::exchange successful");
+        return createResponse(txnTokenString);
     }
 
     private AccessToken createTxnToken(JsonWebToken jwt) {
@@ -132,7 +146,7 @@ public class TTSTokenExchangeProvider implements TokenExchangeProvider {
 
         // REQUIRED
         token.issuedNow();
-        token.exp(Time.currentTime() + TXN_TOKEN_LIFESPAN);
+        token.exp(Time.currentTime() + lifespan);
         token.audience(this.audience);
         token.setOtherClaims(TXN, KeycloakModelUtils.generateId());
         token.setSubject(client.getClientId());
