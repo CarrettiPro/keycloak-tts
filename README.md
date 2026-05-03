@@ -10,7 +10,9 @@ Copy the `target/keycloak-tts-*.jar` file into your Keycloak's `providers` direc
 ## Configuration   
 
 ### Identity Provider
-To enable Transaction Token Service, create an OpenID Connect Identity Provider and name it `tts`.
+To enable Transaction Token Service, create an OpenID Connect Identity Provider and name it `tts`:
+<img width="2190" height="3024" alt="TTS Identity Provider" src="https://github.com/user-attachments/assets/2c74b253-ab84-409e-b0a7-8546bfafe9c9" />
+
 
 The name `tts` is currently hardcoded, and will be used by the implementation to resolve the identity provider. In the future, Keycloak will have a dedicated "Transaction Token Service" identity provider type.
 
