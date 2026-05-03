@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.keycloak.OAuth2Constants;
+import org.keycloak.OAuthErrorException;
 import org.keycloak.TokenVerifier;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.IdentityProviderResource;
@@ -73,6 +74,13 @@ public class TTSTokenExchangeProviderIT extends TestBase {
         assertThat(token.getScope(), is(TTS_SCOPE));
         assertThat(token.getOtherClaims().get(TTSTokenExchangeProvider.REQ_WL), is(TTS_CLIENT));
         assertThat(token.getOtherClaims().get(TTSTokenExchangeProvider.TXN), notNullValue());
+    }
+
+    @Test
+    void testUnhappyPath() throws VerificationException {
+        String at = "foobar";
+        ValidatableResponse response = requestTransactionToken(keycloak, TTS_REALM, TTS_CLIENT, TTS_CLIENT_SECRET, TTS_AUDIENCE, at, 400);
+        assertThat(response.extract().<String>path(OAuth2Constants.ERROR), is(OAuthErrorException.INVALID_REQUEST));
     }
 
     public TTSTokenExchangeProviderIT() {

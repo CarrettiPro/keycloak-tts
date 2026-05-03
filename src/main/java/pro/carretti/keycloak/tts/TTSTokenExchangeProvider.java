@@ -153,7 +153,13 @@ public class TTSTokenExchangeProvider implements TokenExchangeProvider {
             throw new OAuth2Error().invalidRequest("Audience not allowed: " + audience);
         }
 
-        JsonWebToken jwt = idp.validateToken(subjectToken);
+        JsonWebToken jwt;
+        try {
+            jwt = idp.validateToken(subjectToken);
+        } catch (RuntimeException ex) {
+            throw new OAuth2Error().invalidRequest(ex.getMessage());
+        }
+
         try {
             LOG.debugv("Validated subject token:\n{0}", JsonSerialization.writeValueAsPrettyString(jwt));
         } catch (IOException ex) {
