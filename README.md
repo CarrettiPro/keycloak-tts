@@ -25,13 +25,13 @@ As per [12.1. Txn-Token Request](https://www.ietf.org/archive/id/draft-ietf-oaut
  $ bin/kcadm.sh update -r ${TTS_REALM} identity-provider/instances/tts -s 'config."tts.audience"=example.org'
 ```
 
-### Docker images   
+## Container Images
 The project contains two files: `Dockerfile`  and `Dockerfile.init` .
 
-#### Embedded TTS
+### Embedded TTS
 Use `Dockerfile` to build a self-contained image with Keycloak and TTS JAR embedded.
 
-#### Kubernetes Init Container
+### Kubernetes Init Container
 Use `Dockerfile.init` to build a Kubernetes init container image. 
 Example use (with [Codecentric Keycloak.x](https://artifacthub.io/packages/helm/codecentric/keycloakx) chart):   
 ```
