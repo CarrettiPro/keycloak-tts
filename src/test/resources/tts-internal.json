@@ -1,0 +1,70 @@
+{
+  "enabled": true,
+  "realm": "internal",
+  "clients": [
+    {
+      "clientId": "tts-client",
+      "name": "TTS Client",
+      "description": "TTS Client",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "my-special-client-secret",
+      "publicClient": true,
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ]
+    }
+  ],
+  "identityProviders": [
+    {
+      "alias": "tts",
+      "displayName": "TTS Identity Provider",
+      "providerId": "oidc",
+      "enabled": true,
+      "updateProfileFirstLoginMode": "off",
+      "trustEmail": false,
+      "storeToken": false,
+      "addReadTokenRoleOnCreate": false,
+      "authenticateByDefault": false,
+      "linkOnly": true,
+      "hideOnLogin": true,
+      "config": {
+        "tokenUrl": "http://localhost:8080/realms/external/protocol/openid-connect/token",
+        "acceptsPromptNoneForwardFromClient": "false",
+        "jwksUrl": "http://localhost:8080/realms/external/protocol/openid-connect/certs",
+        "isAccessTokenJWT": "false",
+        "showInAccountConsole": "ALWAYS",
+        "filteredByClaim": "false",
+        "backchannelSupported": "false",
+        "caseSensitiveOriginalUsername": "false",
+        "issuer": "http://localhost:8080/realms/external",
+        "loginHint": "false",
+        "clientAuthMethod": "client_secret_post",
+        "syncMode": "LEGACY",
+        "clientSecret": "**********",
+        "requiresShortStateParameter": "false",
+        "allowedClockSkew": "0",
+        "userInfoUrl": "http://localhost:8080/realms/external/protocol/openid-connect/userinfo",
+        "validateSignature": "true",
+        "clientId": "frontend",
+        "uiLocales": "false",
+        "disableNonce": "false",
+        "useJwksUrl": "true",
+        "tokenIntrospectionUrl": "http://localhost:8080/realms/external/protocol/openid-connect/token/introspect",
+        "sendClientIdOnLogout": "false",
+        "pkceEnabled": "false",
+        "metadataDescriptorUrl": "http://localhost:8080/realms/external/.well-known/openid-configuration",
+        "authorizationUrl": "http://localhost:8080/realms/external/protocol/openid-connect/auth",
+        "disableUserInfo": "false",
+        "logoutUrl": "http://localhost:8080/realms/external/protocol/openid-connect/logout",
+        "sendIdTokenOnLogout": "true",
+        "passMaxAge": "false",
+        "disableTypeClaimCheck": "false",
+        "tts.audience": "example.org"
+      }
+    }
+  ]
+}
