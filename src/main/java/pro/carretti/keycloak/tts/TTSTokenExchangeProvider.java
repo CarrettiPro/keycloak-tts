@@ -40,23 +40,24 @@ import org.keycloak.utils.StringUtil;
 
 public class TTSTokenExchangeProvider implements TokenExchangeProvider {
 
+    static final String TXN_TOKEN_REQUESTED_TOKEN_TYPE = "urn:ietf:params:oauth:token-type:txn_token";
+
     private static final Logger LOG = Logger.getLogger(TTSTokenExchangeProvider.class);
     private static final String TTS_IDP_ALIAS = "tts";
-    private static final String TXN_TOKEN_REQUESTED_TOKEN_TYPE = "urn:ietf:params:oauth:token-type:txn_token";
-    private static final String TXN_TOKEN_TYPE = "txntoken+jwt";
+    static final String TXN_TOKEN_TYPE = "txntoken+jwt";
     private static final String N_A = "N_A";
     private static final String REQUEST_CONTEXT = "request_context";
     private static final String REQUEST_DETAILS = "request_details";
 
     // Transaction Token claims
     private static final String RCTX = "rctx";
-    private static final String REQ_WL = "req_wl";
+    static final String REQ_WL = "req_wl";
     private static final String TCTX = "tctx";
-    private static final String TXN = "txn";
+    static final String TXN = "txn";
 
     private static final String TTS_IDP_ALLOWED_AUDIENCE = "tts.audience";
     private static final String TTS_IDP_TXN_TOKEN_LIFESPAN = "tts.token.lifespan";
-    private static final long TXN_TOKEN_LIFESPAN = 5;
+    static final long TXN_TOKEN_LIFESPAN = 5;
 
     private final KeycloakSession session;
     private final RealmModel realm;
@@ -90,10 +91,35 @@ public class TTSTokenExchangeProvider implements TokenExchangeProvider {
         LOG.debug("TTS::exchange");
 
         // REQUIRED
-        this.audience = params.getAudience().getFirst();
+
+        var audiences = params.getAudience();
+        if (audiences == null || audiences.isEmpty()) {
+            LOG.warn("Missing audience parameter");
+            throw new OAuth2Error().invalidRequest("Missing audience parameter");
+        } else if (audiences.size() > 1) {
+            LOG.warn("Multiple audiences provided");
+            throw new OAuth2Error().invalidRequest("Multiple audiences provided");
+        } else {
+            this.audience = audiences.getFirst();
+        }
+
         this.scope = params.getScope();
+        if (StringUtil.isBlank(scope)) {
+            LOG.warn("Missing scope parameter");
+            throw new OAuth2Error().invalidRequest("Missing scope parameter");
+        }
+
         String subjectToken = params.getSubjectToken();
+        if (StringUtil.isBlank(subjectToken)) {
+            LOG.warn("Missing subject_token parameter");
+            throw new OAuth2Error().invalidRequest("Missing subject_token parameter");
+        }
+
         String subjectTokenType = params.getSubjectTokenType();
+        if (StringUtil.isBlank(subjectTokenType)) {
+            LOG.warn("Missing subject_token_type parameter");
+            throw new OAuth2Error().invalidRequest("Missing subject_token_type parameter");
+        }
 
         // OPTIONAL
         this.requestContext = context.getFormParams().getFirst(REQUEST_CONTEXT);
@@ -153,8 +179,6 @@ public class TTSTokenExchangeProvider implements TokenExchangeProvider {
 
         String wlid = client.getAttribute(FederatedJWTClientAuthenticator.JWT_CREDENTIAL_SUBJECT_KEY);
         token.setOtherClaims(REQ_WL, StringUtil.isNotBlank(wlid) ? wlid : client.getClientId());
-
-            // TODO: getPurp()
         token.setOtherClaims(OAuth2Constants.SCOPE, getScope());
 
         // OPTIONAL
@@ -198,12 +222,8 @@ public class TTSTokenExchangeProvider implements TokenExchangeProvider {
     }
 
     private String getScope() {
-        return scope;
         // TODO: validate & map
-//        return switch (scope) {
-//            case "scope1" -> "scope2";
-//            default -> "default";
-//        };
+        return scope;
     }
 
     @Override
