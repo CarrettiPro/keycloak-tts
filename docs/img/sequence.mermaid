@@ -1,0 +1,19 @@
+sequenceDiagram
+    participant AS@{ "type": "control" } as Authorization Service
+    actor User
+    participant API@{ "type": "boundary" } as API Gateway
+    participant TTS@{ "type": "control" } as Transaction Token Service
+    participant SvcA@{ "type": "control" } as Service A
+    participant SvcB@{ "type": "control" } as Service B
+
+    User ->> AS: (authenticate)
+    AS -->> User: AT
+    User ->> API: request + AT
+    API ->> TTS: AT + RCTX + TCTX
+    TTS -->> API: TT
+    API ->> SvcA: TT
+    SvcA ->> SvcB: TT
+    SvcB -->> SvcA: (response)
+    SvcA --> API: (response)
+    API --> User: (response)
+

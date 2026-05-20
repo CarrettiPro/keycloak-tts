@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="SEQUENCE" height="480px" preserveAspectRatio="none" style="width:719px;height:480px;background:#FFFFFF;" version="1.1" viewBox="0 0 719 480" width="719px" zoomAndPan="magnify">
+    <defs/>
+    <g>
+        <g>
+            <title>Authorization Service</title>
+            <rect fill="#000000" fill-opacity="0.00000" height="317.5601" width="8" x="74.4548" y="81.9679"/>
+            <line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;" x1="78" x2="78" y1="81.9679" y2="399.5281"/>
+        </g>
+        <g>
+            <title>User</title>
+            <rect fill="#000000" fill-opacity="0.00000" height="317.5601" width="8" x="183.2019" y="81.9679"/>
+            <line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;" x1="186.9069" x2="186.9069" y1="81.9679" y2="399.5281"/>
+        </g>
+        <g>
+            <title>API Gateway</title>
+            <rect fill="#000000" fill-opacity="0.00000" height="317.5601" width="8" x="292.3649" y="81.9679"/>
+            <line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;" x1="296.0151" x2="296.0151" y1="81.9679" y2="399.5281"/>
+        </g>
+        <g>
+            <title>Transaction Token Service</title>
+            <rect fill="#000000" fill-opacity="0.00000" height="317.5601" width="8" x="438.1164" y="81.9679"/>
+            <line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;" x1="441.7148" x2="441.7148" y1="81.9679" y2="399.5281"/>
+        </g>
+        <g>
+            <title>Service A</title>
+            <rect fill="#000000" fill-opacity="0.00000" height="317.5601" width="8" x="572.703" y="81.9679"/>
+            <line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;" x1="576.5181" x2="576.5181" y1="81.9679" y2="399.5281"/>
+        </g>
+        <g>
+            <title>Service B</title>
+            <rect fill="#000000" fill-opacity="0.00000" height="317.5601" width="8" x="680.8001" y="81.9679"/>
+            <line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;" x1="683.8112" x2="683.8112" y1="81.9679" y2="399.5281"/>
+        </g>
+        <g class="participant participant-head" data-participant="AS">
+            <text fill="#000000" font-family="'Libre Franklin'" font-size="14" lengthAdjust="spacing" textLength="140.9095" x="5" y="78.5239">Authorization Service</text>
+            <ellipse cx="78.4548" cy="49" fill="#00FF7F" rx="12" ry="12" style="stroke:#181818;stroke-width:0.5;"/>
+            <polygon fill="#181818" points="74.4548,37,80.4548,32,78.4548,37,80.4548,42,74.4548,37" style="stroke:#181818;stroke-width:1;"/>
+        </g>
+        <g class="participant participant-tail" data-participant="AS">
+            <text fill="#000000" font-family="'Libre Franklin'" font-size="14" lengthAdjust="spacing" textLength="140.9095" x="5" y="412.052">Authorization Service</text>
+            <ellipse cx="78.4548" cy="431.496" fill="#00FF7F" rx="12" ry="12" style="stroke:#181818;stroke-width:0.5;"/>
+            <polygon fill="#181818" points="74.4548,419.496,80.4548,414.496,78.4548,419.496,80.4548,424.496,74.4548,419.496" style="stroke:#181818;stroke-width:1;"/>
+        </g>
+        <g class="participant participant-head" data-participant="User">
+            <text fill="#000000" font-family="'Libre Franklin'" font-size="14" lengthAdjust="spacing" textLength="30.5899" x="168.9069" y="78.5239">User</text>
+            <ellipse cx="187.2019" cy="13.5" fill="#E2E2F0" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+            <path d="M187.2019,21.5 L187.2019,48.5 M174.2019,29.5 L200.2019,29.5 M187.2019,48.5 L174.2019,63.5 M187.2019,48.5 L200.2019,63.5" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+        </g>
+        <g class="participant participant-tail" data-participant="User">
+            <text fill="#000000" font-family="'Libre Franklin'" font-size="14" lengthAdjust="spacing" textLength="30.5899" x="168.9069" y="412.052">User</text>
+            <ellipse cx="187.2019" cy="423.996" fill="#E2E2F0" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+            <path d="M187.2019,431.996 L187.2019,458.996 M174.2019,439.996 L200.2019,439.996 M187.2019,458.996 L174.2019,473.996 M187.2019,458.996 L200.2019,473.996" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+        </g>
+        <g class="participant participant-head" data-participant="API">
+            <text fill="#000000" font-family="'Libre Franklin'" font-size="14" lengthAdjust="spacing" textLength="84.6997" x="251.0151" y="78.5239">API Gateway</text>
+            <path d="M275.8649,37 L275.8649,61 M275.8649,49 L292.8649,49" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+            <ellipse cx="304.8649" cy="49" fill="#E2E2F0" rx="12" ry="12" style="stroke:#181818;stroke-width:0.5;"/>
+        </g>
+        <g class="participant participant-tail" data-participant="API">
+            <text fill="#000000" font-family="'Libre Franklin'" font-size="14" lengthAdjust="spacing" textLength="84.6997" x="251.0151" y="412.052">API Gateway</text>
+            <path d="M275.8649,419.496 L275.8649,443.496 M275.8649,431.496 L292.8649,431.496" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+            <ellipse cx="304.8649" cy="431.496" fill="#E2E2F0" rx="12" ry="12" style="stroke:#181818;stroke-width:0.5;"/>
+        </g>
+        <g class="participant participant-head" data-participant="TTS">
+            <text fill="#000000" font-family="'Libre Franklin'" font-size="14" lengthAdjust="spacing" textLength="174.8033" x="351.7148" y="78.5239">Transaction Token Service</text>
+            <ellipse cx="442.1164" cy="49" fill="#4169E1" rx="12" ry="12" style="stroke:#181818;stroke-width:0.5;"/>
+            <polygon fill="#181818" points="438.1164,37,444.1164,32,442.1164,37,444.1164,42,438.1164,37" style="stroke:#181818;stroke-width:1;"/>
+        </g>
+        <g class="participant participant-tail" data-participant="TTS">
+            <text fill="#000000" font-family="'Libre Franklin'" font-size="14" lengthAdjust="spacing" textLength="174.8033" x="351.7148" y="412.052">Transaction Token Service</text>
+            <ellipse cx="442.1164" cy="431.496" fill="#4169E1" rx="12" ry="12" style="stroke:#181818;stroke-width:0.5;"/>
+            <polygon fill="#181818" points="438.1164,419.496,444.1164,414.496,442.1164,419.496,444.1164,424.496,438.1164,419.496" style="stroke:#181818;stroke-width:1;"/>
+        </g>
+        <g class="participant participant-head" data-participant="SvcA">
+            <text fill="#000000" font-family="'Libre Franklin'" font-size="14" lengthAdjust="spacing" textLength="62.3698" x="542.5181" y="78.5239">Service A</text>
+            <ellipse cx="576.703" cy="49" fill="#E2E2F0" rx="12" ry="12" style="stroke:#181818;stroke-width:0.5;"/>
+            <polygon fill="#181818" points="572.703,37,578.703,32,576.703,37,578.703,42,572.703,37" style="stroke:#181818;stroke-width:1;"/>
+        </g>
+        <g class="participant participant-tail" data-participant="SvcA">
+            <text fill="#000000" font-family="'Libre Franklin'" font-size="14" lengthAdjust="spacing" textLength="62.3698" x="542.5181" y="412.052">Service A</text>
+            <ellipse cx="576.703" cy="431.496" fill="#E2E2F0" rx="12" ry="12" style="stroke:#181818;stroke-width:0.5;"/>
+            <polygon fill="#181818" points="572.703,419.496,578.703,414.496,576.703,419.496,578.703,424.496,572.703,419.496" style="stroke:#181818;stroke-width:1;"/>
+        </g>
+        <g class="participant participant-head" data-participant="SvcB">
+            <text fill="#000000" font-family="'Libre Franklin'" font-size="14" lengthAdjust="spacing" textLength="61.9778" x="650.8112" y="78.5239">Service B</text>
+            <ellipse cx="684.8001" cy="49" fill="#E2E2F0" rx="12" ry="12" style="stroke:#181818;stroke-width:0.5;"/>
+            <polygon fill="#181818" points="680.8001,37,686.8001,32,684.8001,37,686.8001,42,680.8001,37" style="stroke:#181818;stroke-width:1;"/>
+        </g>
+        <g class="participant participant-tail" data-participant="SvcB">
+            <text fill="#000000" font-family="'Libre Franklin'" font-size="14" lengthAdjust="spacing" textLength="61.9778" x="650.8112" y="412.052">Service B</text>
+            <ellipse cx="684.8001" cy="431.496" fill="#E2E2F0" rx="12" ry="12" style="stroke:#181818;stroke-width:0.5;"/>
+            <polygon fill="#181818" points="680.8001,419.496,686.8001,414.496,684.8001,419.496,686.8001,424.496,680.8001,419.496" style="stroke:#181818;stroke-width:1;"/>
+        </g>
+        <g class="message" data-participant-1="User" data-participant-2="AS">
+            <polygon fill="#00FF7F" points="89.4548,109.7239,79.4548,113.7239,89.4548,117.7239,85.4548,113.7239" style="stroke:#00FF7F;stroke-width:1;"/>
+            <line style="stroke:#00FF7F;stroke-width:1;" x1="83.4548" x2="186.2019" y1="113.7239" y2="113.7239"/>
+            <text fill="#000000" font-family="'Libre Franklin'" font-size="13" lengthAdjust="spacing" textLength="84.7471" x="95.4548" y="108.5259">(authenticate)</text>
+        </g>
+        <g class="message" data-participant-1="AS" data-participant-2="User">
+            <polygon fill="#00FF7F" points="175.2019,139.48,185.2019,143.48,175.2019,147.48,179.2019,143.48" style="stroke:#00FF7F;stroke-width:1;"/>
+            <line style="stroke:#00FF7F;stroke-width:1;stroke-dasharray:2,2;" x1="78.4548" x2="181.2019" y1="143.48" y2="143.48"/>
+            <text fill="#000000" font-family="'Libre Franklin'" font-size="13" lengthAdjust="spacing" textLength="17.836" x="85.4548" y="138.282">AT</text>
+        </g>
+        <g class="message" data-participant-1="User" data-participant-2="API">
+            <line style="stroke:#181818;stroke-width:1;" x1="294.3649" x2="284.3649" y1="173.236" y2="169.236"/>
+            <line style="stroke:#181818;stroke-width:1;" x1="294.3649" x2="284.3649" y1="173.236" y2="177.236"/>
+            <line style="stroke:#181818;stroke-width:1;" x1="187.2019" x2="295.3649" y1="173.236" y2="173.236"/>
+            <text fill="#000000" font-family="'Libre Franklin'" font-size="13" lengthAdjust="spacing" textLength="85.1631" x="194.2019" y="168.038">(request) + AT</text>
+        </g>
+        <g class="message" data-participant-1="API" data-participant-2="TTS">
+            <polygon fill="#4169E1" points="430.1164,198.992,440.1164,202.992,430.1164,206.992,434.1164,202.992" style="stroke:#4169E1;stroke-width:1;"/>
+            <line style="stroke:#4169E1;stroke-width:1;" x1="296.3649" x2="436.1164" y1="202.992" y2="202.992"/>
+            <text fill="#000000" font-family="'Libre Franklin'" font-size="13" lengthAdjust="spacing" textLength="113.9191" x="303.3649" y="197.794">AT + RCTX + TCTX</text>
+        </g>
+        <g class="message" data-participant-1="TTS" data-participant-2="API">
+            <polygon fill="#4169E1" points="307.3649,228.748,297.3649,232.748,307.3649,236.748,303.3649,232.748" style="stroke:#4169E1;stroke-width:1;"/>
+            <line style="stroke:#4169E1;stroke-width:1;stroke-dasharray:2,2;" x1="301.3649" x2="441.1164" y1="232.748" y2="232.748"/>
+            <text fill="#000000" font-family="'Libre Franklin'" font-size="13" lengthAdjust="spacing" textLength="16.77" x="313.3649" y="227.55">TT</text>
+        </g>
+        <g class="message" data-participant-1="API" data-participant-2="SvcA">
+            <line style="stroke:#181818;stroke-width:1;" x1="574.703" x2="564.703" y1="262.504" y2="258.504"/>
+            <line style="stroke:#181818;stroke-width:1;" x1="574.703" x2="564.703" y1="262.504" y2="266.504"/>
+            <line style="stroke:#181818;stroke-width:1;" x1="296.3649" x2="575.703" y1="262.504" y2="262.504"/>
+            <text fill="#000000" font-family="'Libre Franklin'" font-size="13" lengthAdjust="spacing" textLength="84.0971" x="303.3649" y="257.306">(request) + TT</text>
+        </g>
+        <g class="message" data-participant-1="SvcA" data-participant-2="SvcB">
+            <line style="stroke:#181818;stroke-width:1;" x1="682.8001" x2="672.8001" y1="292.26" y2="288.26"/>
+            <line style="stroke:#181818;stroke-width:1;" x1="682.8001" x2="672.8001" y1="292.26" y2="296.26"/>
+            <line style="stroke:#181818;stroke-width:1;" x1="576.703" x2="683.8001" y1="292.26" y2="292.26"/>
+            <text fill="#000000" font-family="'Libre Franklin'" font-size="13" lengthAdjust="spacing" textLength="84.0971" x="583.703" y="287.062">(request) + TT</text>
+        </g>
+        <g class="message" data-participant-1="SvcB" data-participant-2="SvcA">
+            <line style="stroke:#181818;stroke-width:1;" x1="577.703" x2="587.703" y1="322.016" y2="318.016"/>
+            <line style="stroke:#181818;stroke-width:1;" x1="577.703" x2="587.703" y1="322.016" y2="326.016"/>
+            <line style="stroke:#181818;stroke-width:1;stroke-dasharray:2,2;" x1="576.703" x2="683.8001" y1="322.016" y2="322.016"/>
+            <text fill="#000000" font-family="'Libre Franklin'" font-size="13" lengthAdjust="spacing" textLength="63.9731" x="593.703" y="316.818">(response)</text>
+        </g>
+        <g class="message" data-participant-1="SvcA" data-participant-2="API">
+            <polygon fill="#181818" points="307.3649,347.7721,297.3649,351.7721,307.3649,355.7721,303.3649,351.7721" style="stroke:#181818;stroke-width:1;"/>
+            <line style="stroke:#181818;stroke-width:1;stroke-dasharray:2,2;" x1="301.3649" x2="575.703" y1="351.7721" y2="351.7721"/>
+            <text fill="#000000" font-family="'Libre Franklin'" font-size="13" lengthAdjust="spacing" textLength="63.9731" x="313.3649" y="346.574">(response)</text>
+        </g>
+        <g class="message" data-participant-1="API" data-participant-2="User">
+            <polygon fill="#181818" points="198.2019,377.5281,188.2019,381.5281,198.2019,385.5281,194.2019,381.5281" style="stroke:#181818;stroke-width:1;"/>
+            <line style="stroke:#181818;stroke-width:1;stroke-dasharray:2,2;" x1="192.2019" x2="295.3649" y1="381.5281" y2="381.5281"/>
+            <text fill="#000000" font-family="'Libre Franklin'" font-size="13" lengthAdjust="spacing" textLength="63.9731" x="204.2019" y="376.3301">(response)</text>
+        </g>
+        <!--SRC=[RP11IyD048Nl-ok6U358_a0FWKHeAOYKPWL1F4pJgIv9T-FkfXB5_-viJ9D6FItalU_DUt6LqWrQFCAU3jZMVccqlySZGNIdTfPWQL5NjTAH46xqEdfhIPS4d-9BY98HQsg8ijQ_6gi-q2kZeI1xKYL5W0wo0gwAnYhzih94Mc3fZOK7HrRiJAltQ3l6DsjOeQTtx7wWpNhAbjp3CHQIfQbedYyb7zYQ3kkyRccY1WzalQiubTbVBJzhkH2X4IHFbrsVKsw_W6laSQIzAhbX388N_V8bQJze0PaSSj8qR63MXl_bV0mtGGmxcHthyWNk7pZMjxVoaH_9ZmYhPiPa29H321y8c-ONM0mVpsh-dvf3CeDTOxIZU02JgVTPwC-D2o-4Rm00]-->
+    </g>
+</svg>

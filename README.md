@@ -1,5 +1,23 @@
 This is a Keycloak implementation of the [Transaction Tokens](https://datatracker.ietf.org/doc/draft-ietf-oauth-transaction-tokens/) Internet Draft.
 
+## Overview
+
+The draft introduces a concept of a Transaction Token (Txn-Token), which encapsulates the data related to the requesting user (human), requesting workload (non-human) and the transaction itself, and preserves it throughout the entire call chain:
+> Transaction Tokens (Txn-Tokens) are designed to maintain and propagate
+> user identity, workload identity and authorization context throughout
+> the Call Chain within a trusted domain during the processing of external
+> requests (e.g. such as API calls) or requests initiated internally
+> within the trust domain. Txn-Tokens ensure that this context is
+> preserved throughout the Call Chain thereby enhancing security and
+> consistency in complex, multi-service architectures.
+
+The draft also introduces Transaction Token Service (TTS), an OAuth 2.0 compliant service that issues Txn-Tokens via OAuth 2.0 Token Exchange. The diagram below shows the typical deployment and data flow for Transaction Tokens:
+![overview](docs/img/overview.svg)
+
+### Standard Flow
+
+![sequence](docs/img/sequence.svg)
+
 ## Build
 ```
 $ mvn clean install

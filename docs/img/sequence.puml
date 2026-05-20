@@ -1,0 +1,26 @@
+@startuml
+
+skinparam defaultFontName "Libre Franklin"
+
+skinparam sequence {
+}
+
+control "Authorization Service" as AS #SpringGreen
+actor User
+boundary "API Gateway" as API
+control "Transaction Token Service" as TTS #RoyalBlue
+control "Service A" as SvcA
+control "Service B" as SvcB
+
+User -[#SpringGreen]> AS: (authenticate) 
+AS -[#SpringGreen]-> User: AT
+User ->> API: (request) + AT
+API -[#RoyalBlue]> TTS: AT + RCTX + TCTX
+TTS -[#RoyalBlue]-> API: TT
+API ->> SvcA: (request) + TT
+SvcA ->> SvcB: (request) + TT
+SvcB -->> SvcA: (response)
+SvcA --> API: (response)
+API --> User: (response)
+
+@enduml
