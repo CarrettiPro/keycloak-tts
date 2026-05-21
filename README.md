@@ -25,43 +25,50 @@ The draft also introduces Transaction Token Service (TTS), an OAuth 2.0 complian
 ![sequence](docs/img/sequence.svg)
 
 ## Build
+
 ```
-$ mvn clean install
-```
-## Install
-Copy the `target/keycloak-tts-*.jar` file into your Keycloak's `providers` directory.
+# Main JAR
+mvn clean install
 
-## Configuration   
-
-### Identity Provider
-To enable Transaction Token Service, create an OpenID Connect Identity Provider and name it `tts`:
-<img width="2190" height="3024" alt="TTS Identity Provider" src="https://github.com/user-attachments/assets/2c74b253-ab84-409e-b0a7-8546bfafe9c9" />
-
-
-The name `tts` is currently hardcoded, and will be used by the implementation to resolve the identity provider. In the future, Keycloak will have a dedicated "Transaction Token Service" identity provider type.
-
-### Allowed Audience
-As per [12.1. Txn-Token Request](https://www.ietf.org/archive/id/draft-ietf-oauth-transaction-tokens-08.html#name-txn-token-request), the `audience` parameter is mandatory, and must be set to the Trust Domain name.
-
- In Keycloak TTS, this configuration option is also mandatory. Currently, it does not have a UI. To configure trust domain / allowed audience, please use the `kcadm` tool:
- ```
- $ bin/kcadm.sh config credentials --server ${KEYCLOAK_URL} --realm master --user ${KEYCLOAK_ADMIN_USERNAME} --password ${KEYCLOAK_ADMIN_PASSWORD}
- $ bin/kcadm.sh update -r ${TTS_REALM} identity-provider/instances/tts -s 'config."tts.audience"=example.org'
+# Docker images
+mvn docker:build
 ```
 
-## Container Images
-The project contains two files: `Dockerfile`  and `Dockerfile.init` .
+The main build will generate the provider JAR in `target`.
 
-### Embedded TTS
-Use `Dockerfile` to build a self-contained image with Keycloak and TTS JAR embedded.
+The Docker build will generate two images (`XXX` is Keycloak version, `YYY` is TTS version):
+- `carretti/keycloak-tts:XXX-YYY` - Keycloak image with embedded TTS provider
+- `carretti/keycloak-tts-init:XXX-YYY` - init container image for Kubernetes (provider JAR only)
 
-### Kubernetes Init Container
-Use `Dockerfile.init` to build a Kubernetes init container image. 
-Example use (with [Codecentric Keycloak.x](https://artifacthub.io/packages/helm/codecentric/keycloakx) chart):   
+## Deploy
+
+### Standalone
+
+Copy the `target/keycloak-tts-YYY.jar` into the `providers` directory and restart Keycloak.
+
+### Docker
+
+You can either use the image with embedded TTS provider:
+
 ```
+docker run carretti/keycloak-tts:26.6.0-latest start
+```
+
+or mount the provider as a JAR into the `providers` directory of the official Keycloak image:
+
+```
+docker run -v $(pwd)/target/keycloak-tts-1.0.0-SNAPSHOT.jar:/opt/keycloak/providers/keycloak-tts.jar quay.io/keycloak/keycloak:26.6.0 start-dev
+```
+
+### Kubernetes
+
+On Kubernetes, you can use init container image with your favorite Keycloak Helm chart.
+  
+Example use (with [Codecentric Keycloak.x](https://artifacthub.io/packages/helm/codecentric/keycloakx) chart):
+```yaml
 extraInitContainers: |
   - name: keycloak-tts
-    image: example/keycloak-tts-init
+    image: carretti/keycloak-tts-init
     imagePullPolicy: IfNotPresent
     command:
       - sh
@@ -80,4 +87,22 @@ extraVolumes: |
   - name: providers
     emptyDir: {}
 
+```
+
+## Configuration   
+
+### Identity Provider
+To enable Transaction Token Service, create an OpenID Connect Identity Provider and name it `tts`:
+<img width="2190" height="3024" alt="TTS Identity Provider" src="https://github.com/user-attachments/assets/2c74b253-ab84-409e-b0a7-8546bfafe9c9" />
+
+
+The name `tts` is currently hardcoded, and will be used by the implementation to resolve the identity provider. In the future, Keycloak will have a dedicated "Transaction Token Service" identity provider type.
+
+### Allowed Audience
+As per [12.1. Txn-Token Request](https://www.ietf.org/archive/id/draft-ietf-oauth-transaction-tokens-08.html#name-txn-token-request), the `audience` parameter is mandatory, and must be set to the Trust Domain name.
+
+ In Keycloak TTS, this configuration option is also mandatory. Currently, it does not have a UI. To configure trust domain / allowed audience, please use the `kcadm` tool:
+ ```
+ $ bin/kcadm.sh config credentials --server ${KEYCLOAK_URL} --realm master --user ${KEYCLOAK_ADMIN_USERNAME} --password ${KEYCLOAK_ADMIN_PASSWORD}
+ $ bin/kcadm.sh update -r ${TTS_REALM} identity-provider/instances/tts -s 'config."tts.audience"=example.org'
 ```
