@@ -112,3 +112,23 @@ The current implementation performs strict audience check on the external access
 (`Client Secret` is currently ignored and just needs to be non-empty.)
 
 If your external IdP is Keycloak, you can achieve that using either `Audience Resolve` or `Audience` mappers.
+
+## Examples
+
+This is an example request for the Transaction Token Service that is sent to the token endpoint. The client ID is `tts-client`, it uses a secret to authenticate, and the `tts` Identity Provider is configured with the allowed audience `example.org`.
+
+```
+POST /realms/demo/protocol/openid-connect/token HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+Accept: application/json
+
+grant_type=urn:ietf:params:oauth:grant-type:token-exchange&
+client_id=tts-client&
+client_secret=XXXXX&
+subject_token_type=urn:ietf:params:oauth:token-type:access_token&
+subject_token=eyJhbGci[...redacted...].eyJleHAi[...redacted...].GAEppxA6[...redacted...]&
+requested_token_type=urn:ietf:params:oauth:token-type:txn_token&
+audience=example.org&
+scope=foo+bar&
+request_context=%7B%0A%20%20%20%20%20%20%22req_ip%22%3A%20%2269.151.72.123%22%2C%20%0A%20%20%20%20%20%20%22authn%22%3A%20%22urn%3Aietf%3Arfc%3A6749%22%0A%7D
+```
