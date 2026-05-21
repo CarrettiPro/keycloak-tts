@@ -15,6 +15,12 @@ The draft also introduces Transaction Token Service (TTS), an OAuth 2.0 complian
 ![overview](docs/img/overview.svg)
 
 ### Standard Flow
+> [!NOTE]
+> Legend:  
+> AT = Access Token  
+> TT = Transaction Token  
+> RCTX = request context (user IP address, auth details…)  
+> TCTX = transaction context (amount, …)
 
 ![sequence](docs/img/sequence.svg)
 
