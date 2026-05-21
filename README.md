@@ -89,16 +89,15 @@ extraVolumes: |
 
 ```
 
-## Configuration   
+## Configure
 
 ### Identity Provider
 To enable Transaction Token Service, create an OpenID Connect Identity Provider and name it `tts`:
 <img width="2190" height="3024" alt="TTS Identity Provider" src="https://github.com/user-attachments/assets/2c74b253-ab84-409e-b0a7-8546bfafe9c9" />
 
+The name `tts` is currently hardcoded, and will be used by the implementation to resolve the identity provider. In the future, it will be possible to link an arbitrary identity provider via the Keycloak Admin UI.
 
-The name `tts` is currently hardcoded, and will be used by the implementation to resolve the identity provider. In the future, Keycloak will have a dedicated "Transaction Token Service" identity provider type.
-
-### Allowed Audience
+### Transaction Token Audience
 As per [12.1. Txn-Token Request](https://www.ietf.org/archive/id/draft-ietf-oauth-transaction-tokens-08.html#name-txn-token-request), the `audience` parameter is mandatory, and must be set to the Trust Domain name.
 
  In Keycloak TTS, this configuration option is also mandatory. Currently, it does not have a UI. To configure trust domain / allowed audience, please use the `kcadm` tool:
@@ -106,3 +105,10 @@ As per [12.1. Txn-Token Request](https://www.ietf.org/archive/id/draft-ietf-oaut
  $ bin/kcadm.sh config credentials --server ${KEYCLOAK_URL} --realm master --user ${KEYCLOAK_ADMIN_USERNAME} --password ${KEYCLOAK_ADMIN_PASSWORD}
  $ bin/kcadm.sh update -r ${TTS_REALM} identity-provider/instances/tts -s 'config."tts.audience"=example.org'
 ```
+
+### Access Token Audience
+
+The current implementation performs strict audience check on the external access token. The value of the `aud` claim must be equal to the `Client ID` value entered in the Identity Provider configuration screen.
+(`Client Secret` is currently ignored and just needs to be non-empty.)
+
+If your external IdP is Keycloak, you can achieve that using either `Audience Resolve` or `Audience` mappers.
