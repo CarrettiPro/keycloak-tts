@@ -149,7 +149,7 @@ public class TTSTokenExchangeProvider implements TokenExchangeProvider {
         }
 
         if (!allowedAudience.equals(audience)) {
-            LOG.warnv("Audience not allowed: ", audience);
+            LOG.warnv("Audience not allowed: {0}", audience);
             throw new OAuth2Error().invalidRequest("Audience not allowed: " + audience);
         }
 
