@@ -190,3 +190,6 @@ The payload of the issued Txn-Token:
   }
 }
 ```
+
+## Resources
+[Human and Workload Identities: Bridging the Gap with Keycloak](https://www.youtube.com/watch?v=TWiBDnq6vmU) | Dmitry Telegin at Keycloak DevDay 2026 Darmstadt
