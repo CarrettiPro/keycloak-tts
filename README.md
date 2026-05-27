@@ -125,12 +125,68 @@ Content-Type: application/x-www-form-urlencoded
 Accept: application/json
 
 grant_type=urn:ietf:params:oauth:grant-type:token-exchange&
-client_id=tts-client&
-client_secret=XXXXX&
+client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-spiffe&
+client_assertion=eyJhbGci[...redacted...].eyJhdWQi[...redacted...].Xlv5lW4c[...redacted...]&
 subject_token_type=urn:ietf:params:oauth:token-type:access_token&
 subject_token=eyJhbGci[...redacted...].eyJleHAi[...redacted...].GAEppxA6[...redacted...]&
 requested_token_type=urn:ietf:params:oauth:token-type:txn_token&
-audience=example.org&
+audience=trust-domain.example&
 scope=foo+bar&
-request_context=%7B%0A%20%20%20%20%20%20%22req_ip%22%3A%20%2269.151.72.123%22%2C%20%0A%20%20%20%20%20%20%22authn%22%3A%20%22urn%3Aietf%3Arfc%3A6749%22%0A%7D
+request_context=%7B%22req_ip%22%3A%2269.151.72.123%22%2C%22authn%22%3A%22urn%3Aietf%3Arfc%3A6749%22%7D&
+request_details=%7B%22action%22%3A%20%22BUY%22%2C%22ticker%22%3A%20%22MSFT%22%2C%22quantity%22%3A%20%22100%22%7D
+```
+
+Here, `request_context` is a JSON object describing the request-specific attributes:
+```json
+{
+    "req_ip": "69.151.72.123", // env context of the external call
+    "authn": "urn:ietf:rfc:6749", // env context of the external call
+}
+```
+
+`request_details` is a JSON object describing the transaction properties:
+```json
+{
+    "action": "BUY", // parameter of the external call
+    "ticker": "MSFT", // parameter of the external call
+    "quantity": "100" // parameter of the external call
+}
+```
+
+The TTS returns a token response:
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "issued_token_type": "urn:ietf:params:oauth:token-type:txn_token",
+  "access_token": "eyJhbGci[...redacted...].eyJleHAi[...redacted...].QL9TUdAb[...redacted...]",
+  "token_type": "N_A"
+}
+```
+
+The payload of the issued Txn-Token:
+```json
+{
+  "iat": 1686536226,
+  "exp": 1686536586,
+  "aud": "trust-domain.example",
+  "sub": "d084sdrt234fsaw34tr23t",
+  "scope" : "trade.stocks",
+  "txn": "97053963-771d-49cc-a4e3-20aad399c312",
+  "req_wl": "spiffe://example.org/ns/default/sa/tts-edge", // the internal entity that requested the Txn-Token
+  "rctx": {
+    "req_ip": "69.151.72.123", // env context of the external call
+    "authn": "urn:ietf:rfc:6749", // env context of the external call
+  },
+  "tctx": {
+    "action": "BUY", // parameter of the external call
+    "ticker": "MSFT", // parameter of the external call
+    "quantity": "100", // parameter of the external call
+    "customer_type": { // computed value not present in the external call
+      "geo": "US",
+      "level": "VIP"
+    }
+  }
+}
 ```
