@@ -1,5 +1,7 @@
 This is a Keycloak implementation of the [Transaction Tokens](https://datatracker.ietf.org/doc/draft-ietf-oauth-transaction-tokens/) Internet Draft.
 
+You can try it out in local Kubernetes, using the [demo environment](https://github.com/CarrettiPro/tts-demo) provided. Alternatively, you can build and deploy the Transaction Token Service into your existing Keycloak installation.
+
 ## Overview
 
 The draft introduces a concept of a Transaction Token (Txn-Token), which encapsulates the data related to the requesting user (human), requesting workload (non-human) and the transaction itself, and preserves it throughout the entire call chain:
