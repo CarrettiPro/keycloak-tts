@@ -201,7 +201,10 @@ public class TTSTokenExchangeProvider implements TokenExchangeProvider {
             }
         }
 
-        // TODO: tctx
+        if (StringUtil.isNotBlank(requestDetails)) {
+            String tctx = URLDecoder.decode(requestDetails, Charset.defaultCharset());
+            token.setOtherClaims(TCTX, tctx);
+        }
 
         return token;
     }
